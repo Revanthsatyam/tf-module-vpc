@@ -20,3 +20,10 @@ resource "aws_internet_gateway" "igw" {
     Name = "dev-igw"
   }
 }
+
+#resource "aws_route" "igw" {
+#  for_each = lookup(lookup(module.subnets, "public", null), route
+#  route_table_id            = aws_route_table.testing.id
+#  destination_cidr_block    = "10.0.1.0/22"
+#  vpc_peering_connection_id = "pcx-45ff3dc1"
+#}
