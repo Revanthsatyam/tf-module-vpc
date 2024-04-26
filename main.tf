@@ -28,13 +28,14 @@ resource "aws_route" "igw" {
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-resource "aws_eip" "lb" {
+resource "aws_eip" "ngw" {
   for_each = lookup(lookup(module.subnets, "public", null), "subnet_ids", null)
   domain   = "vpc"
 }
 
-resource "aws_nat_gateway" "example" {
+resource "aws_nat_gateway" "ngw" {
   for_each = lookup(lookup(module.subnets, "public", null), "subnet_ids", null)
+  allocation_id = aws_eip.ngw.id
   subnet_id     = each.value["id"]
   depends_on = [aws_internet_gateway.igw]
 }
