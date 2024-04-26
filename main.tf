@@ -34,8 +34,8 @@ resource "aws_eip" "ngw" {
 }
 
 resource "aws_nat_gateway" "ngw" {
-  for_each = lookup(lookup(module.subnets, "public", null), "subnet_ids", null)
-  allocation_id = aws_eip.ngw.id
+  for_each      = lookup(lookup(module.subnets, "public", null), "subnet_ids", null)
+  allocation_id = lookup(lookup(aws_eip.ngw, each.key, null), "id", null)
   subnet_id     = each.value["id"]
-  depends_on = [aws_internet_gateway.igw]
+  depends_on    = [aws_internet_gateway.igw]
 }
