@@ -33,8 +33,8 @@ resource "aws_eip" "lb" {
   domain   = "vpc"
 }
 
-#resource "aws_nat_gateway" "example" {
-#  allocation_id = aws_eip.example.id
-#  subnet_id     = aws_subnet.example.id
-#  depends_on = [aws_internet_gateway.igw]
-#}
+resource "aws_nat_gateway" "example" {
+  for_each = lookup(lookup(module.subnets, "public", null), "subnet_ids", null)
+  subnet_id     = each.value["id"]
+  depends_on = [aws_internet_gateway.igw]
+}
